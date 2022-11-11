@@ -31,7 +31,8 @@ class Storage:
             objects = self.__session.query(cls).all()
         dico = {}
         for obj in objects:
-            dico[obj.__class__.__name__] = obj.id
+            key = obj.__class__.__name__ + '.' + obj.id
+            dico[key] = obj
         return dico
 
     def reload(self):
@@ -55,3 +56,25 @@ class Storage:
         """delete the object"""
         if obj:
             self.__session.delete(obj)
+
+    def delete_all(self, cls):
+        """delete all row for this class"""
+        self.__session.query(cls).delete()
+
+
+    def get_email(self, email=""):
+        if email:
+            result = self.__session.query(User).filter(User.email == email)        
+        if list(result) == []:
+            return False
+        return True
+
+
+    def get_user(self, cls, id):
+        try:
+            objects = {}
+            for obj in list(self.all(cls).values()):
+                objects[obj.id] = obj
+            return objects.get(id)
+        except Exception:
+            return None
