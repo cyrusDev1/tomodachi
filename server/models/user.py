@@ -23,8 +23,6 @@ class User(BaseModel, Base):
     country =  Column(String(128), nullable=False)
     age = Column(String(128), nullable=False)
     picture =  Column(String(200), nullable=False)
-    messages = relationship("Message", backref="message", cascade='delete')
-    connections = relationship("Connection", backref="connection", cascade='delete')
     interests = relationship("Interest", secondary="users_interests", backref="users_interests", viewonly=False)
 
     def __init__(self, *args, **kwargs) -> None:

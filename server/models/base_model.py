@@ -4,7 +4,6 @@ from datetime import datetime
 from uuid import uuid4
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, DateTime, String
-print('creating Base')
 Base = declarative_base()
 
 
@@ -39,7 +38,6 @@ class BaseModel:
         time = "%Y-%m-%dT%H:%M:%S"
         if "created_at" in new_dict:
             new_dict["created_at"] = new_dict["created_at"].strftime(time)
+        if "_sa_instance_state" in new_dict:
+            del new_dict['_sa_instance_state']
         return new_dict
-
-#base = BaseModel()
-#print(base)
