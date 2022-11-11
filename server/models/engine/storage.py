@@ -8,6 +8,7 @@ from models.user import User
 from models.message import Message
 from models.interest import Interest
 from models.connection import Connection
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 class Storage:
@@ -25,11 +26,32 @@ class Storage:
                                       format(MYSQL_USER, MYSQL_PWD,
                                       MYSQL_HOST, MYSQL_DB), pool_pre_ping=True)
 
+    def all(self, cls=None):
+        if cls:
+            objects = self.__session.query(cls).all()
+        dico = {}
+        for obj in objects:
+            dico[obj.__class__.__name__] = obj.id
+        return dico
+
     def reload(self):
         Base.metadata.create_all(self.__engine)
+        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        self.__session = scoped_session(session_factory)
 
+    def close(self):
+        """CLose the current session"""
+        self.__session.close()
 
     def new(self, obj):
         """add the object to the current database session"""
         self.__session.add(obj)
- 
+    
+    def save(self):
+        """commit all updates"""
+        self.__session.commit()
+
+    def delete(self, obj=None):
+        """delete the object"""
+        if obj:
+            self.__session.delete(obj)
