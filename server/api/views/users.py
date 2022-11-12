@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 """Defines all users routes"""
-from flask import jsonify, make_response, request, abort
+from flask import jsonify, request, abort
 from models import storage
 from models.user import User
-
 from api.views import app_views
 
 
@@ -20,7 +19,7 @@ def post_user():
     data = request.get_json()
     if data is None:
         abort(400, 'Not json')
-    if storage.get_email(data['email']):
+    if storage.check_email(data['email']):
         return jsonify({"error": "email already exists"}), 400
     new = User(**data)
     storage.new(new)
@@ -31,7 +30,7 @@ def post_user():
 @app_views.route("/user/<user_id>", methods=['GET'])
 def get_user(user_id):
     """get a user with this user_id"""
-    user = storage.get_user(User, user_id)
+    user = storage.get(User, user_id)
     if user:
         return jsonify(user.to_dict()), 200
     return jsonify({"error": "This user don't exist"}), 400
@@ -39,7 +38,7 @@ def get_user(user_id):
 
 @app_views.route("/user/<user_id>", methods=['DELETE'])
 def delete_user(user_id):
-    user = storage.get_user(User, user_id)
+    user = storage.get(User, user_id)
     if user:
         storage.delete(user)
         storage.save()
