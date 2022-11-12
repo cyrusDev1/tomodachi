@@ -62,15 +62,22 @@ class Storage:
         self.__session.query(cls).delete()
 
 
-    def get_email(self, email=""):
+    def check_email(self, email=""):
         if email:
             result = self.__session.query(User).filter(User.email == email)        
         if list(result) == []:
             return False
         return True
 
+    def check_interest(self, interest=""):
+        if interest:
+            result = self.__session.query(Interest).filter(Interest.name == interest)        
+        if list(result) == []:
+            return False
+        return True
 
-    def get_user(self, cls, id):
+
+    def get(self, cls, id):
         try:
             objects = {}
             for obj in list(self.all(cls).values()):
