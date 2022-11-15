@@ -3,6 +3,7 @@
 from flask import jsonify, request, abort
 from models import storage
 from models.user import User
+from models.interest import Interest
 from api.views import app_views
 
 
@@ -11,8 +12,9 @@ def get_users():
     all_users = []
     for obj in list(storage.all(User).values()):
         all_users.append(obj.to_dict())
+        print(obj)
     return jsonify(all_users)
-    
+
 
 @app_views.route('/users', methods=['POST'])
 def post_user():
@@ -32,7 +34,42 @@ def get_user(user_id):
     """get a user with this user_id"""
     user = storage.get(User, user_id)
     if user:
+        print(user)
         return jsonify(user.to_dict()), 200
+    return jsonify({"error": "This user don't exist"}), 400
+
+
+@app_views.route("/user/<user_id>/interests", methods=['GET'])
+def get_interests_ofuser(user_id):
+    """get interests of user"""
+    user = storage.get(User, user_id)
+    if user:
+        user_interests = [interest.to_dict() for interest in user.interests]
+        return jsonify(user_interests)
+    return jsonify({"error": "This user don't exist"}), 400  
+
+
+@app_views.route("/user/interests", methods=['POST'])
+def post_interests_ofuser():
+    """post interests of user"""
+    data = request.get_json()
+    if data is None:
+        abort(400)
+    user_id = data['user_id']
+    interests = data['interests']
+    if user_id and interests:
+        user = storage.get(User, user_id)
+        if user:
+            for id_interest in interests:
+                interest = storage.get(Interest, id_interest)
+                if interest is None:
+                    return jsonify({"error": "One  or many interests not found"}), 400
+                else:
+                    if interest not in user.interests:
+                        user.interests.append(interest)
+                        storage.save()
+            user_interests = [interest.to_dict() for interest in user.interests]
+            return jsonify(user_interests), 201
     return jsonify({"error": "This user don't exist"}), 400
 
 
@@ -43,5 +80,5 @@ def delete_user(user_id):
         storage.delete(user)
         storage.save()
         return jsonify({}), 200
-    return jsonify({"error": "This user don't exist"})
+    return jsonify({"error": "This user don't exist"}), 400
 

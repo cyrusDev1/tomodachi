@@ -28,12 +28,25 @@ def post_interests():
     return jsonify(new.to_dict()), 201
 
 
-@app_views.route("/interests/<interest_id>", methods=['DELETE'])
-def delete_user(interest_id):
-    user = storage.get_user(Interest, interest_id)
+@app_views.route('/interest/<interest_id>/users', methods=['GET'])
+def get_users_with_interest(interest_id):
+    """Get users with this interest"""
+    interest = storage.get(Interest, interest_id)
+    if interest:
+        users = []
+        for user_id in list(storage.all(User).keys()):
+            user = storage.get(User, user_id.split('.')[1])
+            if interest in user.interests:
+                users.append(user.to_dict())
+        return jsonify(users), 200
+    return jsonify({'error': 'interest not found'})
+
+
+@app_views.route("/interest/<interest_id>", methods=['DELETE'])
+def delete_interest(interest_id):
+    user = storage.get(Interest, interest_id)
     if user:
         storage.delete(user)
         storage.save()
         return jsonify({}), 200
     return jsonify({"error": "This user don't exist"})
-

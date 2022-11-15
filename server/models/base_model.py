@@ -40,4 +40,10 @@ class BaseModel:
             new_dict["created_at"] = new_dict["created_at"].strftime(time)
         if "_sa_instance_state" in new_dict:
             del new_dict['_sa_instance_state']
+        if "interests" in new_dict:
+            interests = []
+            tmp = new_dict['interests']
+            for interest in tmp:
+                interests.append(interest.to_dict())
+            new_dict['interests'] = interests
         return new_dict

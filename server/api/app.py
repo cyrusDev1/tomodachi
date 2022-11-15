@@ -11,7 +11,7 @@ app.url_map.strict_slashes = False
 app.register_blueprint(app_views)
 CORS(app, resources={r"/*": {"origin": "*"}})
 host = "0.0.0.0"
-port = "5000"
+port = "5001"
 
 
 @app.teardown_appcontext
