@@ -12,8 +12,6 @@ class Message(BaseModel, Base):
     sender_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     receiver_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     message = Column(String(60), nullable=False)
-    sender = relationship("User", foreign_keys=[sender_id])
-    receiver = relationship("User", foreign_keys=[receiver_id])
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)

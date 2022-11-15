@@ -112,6 +112,32 @@ class Storage:
         )
         return list(result)
 
+    def user_has_match(self, sender_id, receiver_id):
+        """"""
+        result = self.__session.query(Connection).filter(
+            and_(
+               or_(
+                    and_(Connection.first_user_id  == sender_id, Connection.second_user_id == receiver_id),
+                    and_(Connection.first_user_id  == receiver_id, Connection.second_user_id == sender_id)
+                ),
+                Connection.match == 1
+            )
+        )
+        if list(result) == []:
+            return False
+        return True
+
+    def get_messages(self, sender_id, receiver_id):
+        """"""
+        result = self.__session.query(Message).filter(
+            or_(
+                and_(Message.sender_id == sender_id, Message.receiver_id == receiver_id),
+                and_(Message.sender_id == receiver_id, Message.receiver_id == sender_id)
+            )
+        ).all()
+        return list(result)
+
+
     def get(self, cls, id):
         try:
             objects = {}
