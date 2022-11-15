@@ -13,8 +13,7 @@ class Connection(BaseModel, Base):
     first_user_link_second_user = Column(Integer, nullable=False)
     second_user_link_first_user = Column(Integer, nullable=False)
     match = Column(Boolean(1), nullable=False)
-    first_user = relationship("User", foreign_keys=[first_user_id])
-    second_user = relationship("User", foreign_keys=[second_user_id])
+
 
 
     def __init__(self, *args, **kwargs) -> None:

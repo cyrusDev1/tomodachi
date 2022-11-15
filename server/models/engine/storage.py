@@ -9,7 +9,7 @@ from models.message import Message
 from models.interest import Interest
 from models.connection import Connection
 from sqlalchemy.orm import scoped_session, sessionmaker
-
+from sqlalchemy import or_, and_
 
 class Storage:
     """Storage class"""
@@ -70,12 +70,47 @@ class Storage:
         return True
 
     def check_interest(self, interest=""):
+        """Check if interest exist"""
         if interest:
             result = self.__session.query(Interest).filter(Interest.name == interest)        
         if list(result) == []:
             return False
         return True
 
+    def already_link(self, sender_id, receiver_id):
+        """Check if users are already linked"""
+        if sender_id and receiver_id:
+            result = self.__session.query(Connection).filter(
+                or_(
+                    and_(Connection.first_user_id  == sender_id, Connection.second_user_id == receiver_id),
+                    and_(Connection.first_user_id  == receiver_id, Connection.second_user_id == sender_id)
+                )
+            )               
+        if list(result) == []:
+            return False
+        return list(result)[0]
+
+    def sent(self, user_id):
+        """"""
+        result = self.__session.query(Connection).filter(Connection.first_user_id == user_id, 
+            Connection.first_user_link_second_user == 1, Connection.match == 0)
+        return list(result)
+
+    def received(self, user_id):
+        """"""
+        result = self.__session.query(Connection).filter(Connection.second_user_id == user_id, 
+            Connection.second_user_link_first_user == 1, Connection.match == 0)
+        return list(result)
+
+    def matches(self, user_id):
+        """"""
+        result = self.__session.query(Connection).filter(
+            and_(
+                or_(Connection.first_user_id == user_id, Connection.second_user_id == user_id),
+                Connection.match == 1
+            )
+        )
+        return list(result)
 
     def get(self, cls, id):
         try:

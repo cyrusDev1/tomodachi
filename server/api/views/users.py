@@ -12,7 +12,6 @@ def get_users():
     all_users = []
     for obj in list(storage.all(User).values()):
         all_users.append(obj.to_dict())
-        print(obj)
     return jsonify(all_users)
 
 
@@ -82,3 +81,35 @@ def delete_user(user_id):
         return jsonify({}), 200
     return jsonify({"error": "This user don't exist"}), 400
 
+
+@app_views.route("/user/<user_id>/sent")
+def get_sent(user_id):
+    sent = storage.sent(user_id)
+    users = [] 
+    for conn in sent:
+        user_received = storage.get(User, conn.second_user_id)
+        users.append(user_received.to_dict())
+    return jsonify(users)
+
+
+@app_views.route("/user/<user_id>/received")
+def get_received(user_id):
+    received = storage.received(user_id)
+    users = [] 
+    for conn in received:
+        user_send = storage.get(User, conn.first_user_id)
+        users.append(user_send.to_dict())
+    return jsonify(users)
+
+
+@app_views.route("/user/<user_id>/matches")
+def get_matches(user_id):
+    users = []
+    matches = storage.matches(user_id)
+    for conn in matches:
+        if user_id == conn.first_user_id:
+            user_match = storage.get(User, conn.second_user_id)
+        elif user_id == conn.second_user_id:
+            user_match = storage.get(User, conn.first_user_id)
+        users.append(user_match.to_dict())
+    return jsonify(users)
