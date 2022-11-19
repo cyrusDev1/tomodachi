@@ -138,6 +138,15 @@ class Storage:
         return list(result)
 
 
+    def check_user(self, data):
+        """"""
+        email = data['email']
+        password = data['password']
+        result = self.__session.query(User).filter(and_(User.email == email, User.password == password))
+        if list(result) == []:
+            return None
+        return list(result)[0]
+
     def get(self, cls, id):
         try:
             objects = {}

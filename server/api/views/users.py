@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Defines all users routes"""
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, make_response
 from models import storage
 from models.user import User
 from models.interest import Interest
@@ -26,6 +26,17 @@ def post_user():
     storage.new(new)
     storage.save()
     return jsonify(new.to_dict()), 201
+
+
+@app_views.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    if data is None:
+        abort(400, 'Not json')
+    user =  storage.check_user(data)
+    if user is None:
+        return make_response(jsonify({"error": "Email or password not correct"}), 401)
+    return jsonify(user.to_dict()), 200
 
 
 @app_views.route("/user/<user_id>", methods=['GET'])
