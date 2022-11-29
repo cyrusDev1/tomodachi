@@ -9,7 +9,7 @@ from models.message import Message
 from models.interest import Interest
 from models.connection import Connection
 from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, desc
 
 class Storage:
     """Storage class"""
@@ -99,7 +99,7 @@ class Storage:
     def received(self, user_id):
         """"""
         result = self.__session.query(Connection).filter(Connection.second_user_id == user_id, 
-            Connection.second_user_link_first_user == 1, Connection.match == 0)
+            Connection.first_user_link_second_user == 1, Connection.match == 0, Connection.second_user_link_first_user == 2)
         return list(result)
 
     def matches(self, user_id):
@@ -133,6 +133,16 @@ class Storage:
             or_(
                 and_(Message.sender_id == sender_id, Message.receiver_id == receiver_id),
                 and_(Message.sender_id == receiver_id, Message.receiver_id == sender_id)
+            )
+        ).order_by(desc(Message.created_at)).all()
+        return list(result)
+
+    
+    def get_list_messages(self, user_id):
+        """"""
+        result = self.__session.query(Message).filter(
+            or_(
+                Message.sender_id == user_id, Message.receiver_id == user_id
             )
         ).all()
         return list(result)

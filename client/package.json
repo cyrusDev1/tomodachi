@@ -11,9 +11,11 @@
     "@formkit/vue": "^1.0.0-beta.12",
     "@kyvg/vue3-notification": "^2.6.1",
     "firebase": "^8.3.2",
+    "moment": "^2.29.4",
     "vue": "^3.2.41",
     "vue-router": "^4.1.5",
-    "vue3-cookies": "^1.0.6"
+    "vue3-cookies": "^1.0.6",
+    "vue3-tabs-component": "^1.1.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.2",

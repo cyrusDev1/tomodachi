@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from "../views/Login.vue"
 import Register from "../views/Register.vue"
+import Main from "../views/Main.vue"
+import Message from "../views/Message.vue"
 
 
 const router = createRouter({
@@ -16,18 +18,17 @@ const router = createRouter({
             component: Register,
             name: 'Register'
         },
-        /*{
+        {
             path: "/app",
             component: Main,
             name: 'Main',
-            children:[
-                {
-                    path: '/home',
-                    name: 'Home',
-                    component: Home
-                }
-            ]
-        }*/
+        },
+        {
+                path: '/app/messages/:id',
+                name: 'Message',
+                component: Message
+        }
+        
         //component: () => import('../views/AboutView.vue')
     ]
 })

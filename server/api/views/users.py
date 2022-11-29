@@ -124,3 +124,34 @@ def get_matches(user_id):
             user_match = storage.get(User, conn.first_user_id)
         users.append(user_match.to_dict())
     return jsonify(users)
+
+
+@app_views.route("/user/<user_id>/swipping")
+def get_swip(user_id):
+    all_users = []
+    for obj in list(storage.all(User).values()):
+        if user_id != obj.id:
+            all_users.append(obj)
+    print(len(all_users))
+    no_matches = []
+    for user in all_users:
+        if storage.user_has_match(user.id, user_id) is False:
+            no_matches.append(user)
+
+    print(len(no_matches))
+    _sent = []
+    sent = storage.sent(user_id)
+    for conn in _sent:
+        user_received = storage.get(User, conn.second_user_id)
+        _sent.append(user_received)
+    no_sent = []
+    print(len(_sent))
+    for no_match in no_matches:
+        if no_match not in _sent:
+            no_sent.append(no_match)
+
+    swip = []
+    for obj in no_sent:
+        swip.append(obj.to_dict())
+    print(len(swip))
+    return jsonify(swip)

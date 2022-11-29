@@ -1,6 +1,6 @@
 <template>
     <div class="register">
-        <FormKit type="form" submit-label="Register" @submit="login">
+        <FormKit type="form" submit-label="Register" @submit="register" #default="{ value }">
 
             <h1 class="">Register!</h1>
             <p>
@@ -28,38 +28,122 @@
                     accept=".png,.jpg,.jpeg,.PNG,.JPG,.JPEG" />
             </div>
 
+
+
             <div v-if="imageData != null">
                 <img class="preview" height="268" width="356" :src="img1">
                 <br>
             </div>
 
+            <FormKit type="checkbox" label="Interests" name="interests"
+                :options="[{ 'value': '30ca46ff-fdcc-421b-8e71-7ab7b06fab9a', 'label': 'Naruto' }, { 'value': 'b58f0850-bc15-4ba5-a952-3354f1e64c2c', 'label': 'Bleach' }]"
+                decorator-icon="heart" help="Select your interests" validation="min:0" />
 
-            <pre wrap>{{ value }}</pre>
-            {{ img1 }}
+            <pre>{{ value }}</pre>
         </FormKit>
     </div>
 
 </template>
 <script>
+import firebase from 'firebase';
+import req from '../store/index.js';
+import { useCookies } from "vue3-cookies";
+
 export default {
     data() {
         return {
             loading: true,
             img1: '',
-            imageData: null
+            imageData: null,
+            uploadValue: 0,
+            Interests: []
         }
     },
 
+    //
+    created() {
+        const url = `/interests`
+        const that = this
+        req.get(url)
+            .then(response => {
+                const Interests = []
+                response.data.forEach(interest => {
+                    const select = {
+                        "value": interest.id,
+                        "label": interest.name
+                    }
+                    that.Interests.push(select)
+                });
+            }).catch(error => {
+                console.log(error)
+            });
+    },
     methods: {
         previewImage(event) {
             this.uploadValue = 0;
             this.img1 = null;
             this.imageData = event.target.files[0];
             this.img1 = URL.createObjectURL(event.target.files[0]);
+            //this.onUpload()
         },
 
-        login(value) {
-            alert(value);
+        getInterests() {
+
+        },
+
+        register(value) {
+            value.picture = null
+            const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
+            storageRef.on(`state_changed`, snapshot => {
+                this.uploadValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            }, error => { console.log(error.message) },
+                () => {
+                    this.uploadValue = 100;
+                    storageRef.snapshot.ref.getDownloadURL().then((url) => {
+                        value.picture = url;
+                        req({
+                            method: 'post',
+                            url: '/users',
+                            data: value
+                        })
+                            .then(response => {
+                                console.log(response);
+                                const user_id = response.data.id
+                                this.postInterests(user_id, value.interests)
+                            })
+                            .catch(error => {
+                                if (error.response) {
+                                    this.$notify({
+                                        text: error.response.data.error,
+                                        type: 'error',
+                                    });
+                                }
+                            })
+                    });
+                }
+            );
+        },
+
+        postInterests(user_id, interests) {
+            req({
+                method: 'post',
+                url: '/user/interests',
+                data: {
+                    user_id,
+                    interests,
+                }
+            })
+                .then(response => {
+                    console.log(response);
+                    this.$router.push('/login')
+                }).catch(error => {
+                    if (error.response) {
+                        this.$notify({
+                            text: error.response.data.error,
+                            type: 'error',
+                        });
+                    }
+                })
         }
     }
 }

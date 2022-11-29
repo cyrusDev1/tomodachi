@@ -21,6 +21,8 @@ class BaseModel:
                 if key != "__class__":
                     if key == "created_at":
                         setattr(self, key, datetime.fromisoformat(value))
+                    elif key == "interests":
+                        pass
                     else:
                         if key == "id":
                             setattr(self, key, str(uuid4()))
@@ -40,6 +42,9 @@ class BaseModel:
             new_dict["created_at"] = new_dict["created_at"].strftime(time)
         if "_sa_instance_state" in new_dict:
             del new_dict['_sa_instance_state']
+        val = self
+        if "email" in new_dict:
+            new_dict.setdefault("interests", self.interests)
         if "interests" in new_dict:
             interests = []
             tmp = new_dict['interests']
