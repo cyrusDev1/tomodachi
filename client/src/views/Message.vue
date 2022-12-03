@@ -2,6 +2,7 @@
     <Header :user="this.User"></Header>
     <Layout :id="this.User.id" :user="this.User"></Layout>
  </template>
+ 
 <script>
 import { useCookies } from "vue3-cookies";
 import req from '../store/index.js';

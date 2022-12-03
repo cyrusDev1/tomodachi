@@ -1,7 +1,6 @@
 <template>
     <div class="register">
         <FormKit type="form" submit-label="Register" @submit="register" #default="{ value }">
-
             <h1 class="">Register!</h1>
             <p>
                 Join Tomodachi to meet new friends.
@@ -105,7 +104,6 @@
 <script>
 import firebase from 'firebase';
 import req from '../store/index.js';
-import { useCookies } from "vue3-cookies";
 
 export default {
     data() {
