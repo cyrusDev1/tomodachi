@@ -141,11 +141,11 @@ def get_swip(user_id):
     print(len(no_matches))
     _sent = []
     sent = storage.sent(user_id)
-    for conn in _sent:
+    for conn in sent:
         user_received = storage.get(User, conn.second_user_id)
         _sent.append(user_received)
     no_sent = []
-    print(len(_sent))
+    print(sent)
     for no_match in no_matches:
         if no_match not in _sent:
             no_sent.append(no_match)
