@@ -35,7 +35,6 @@ For this project, i decided to focus on learning a new front-end framework. Foll
 I decided to create the backend routes with flask because that's what we saw at cold, I wanted to deepen.
 
 ## Storage
-I decided to create the backend routes with flask because that's what we saw at cold, I wanted to deepen.
 
 ![sql](https://miro.medium.com/max/720/1*ux31K4sYNM8dJ40LPJu9lg.webp)
 
