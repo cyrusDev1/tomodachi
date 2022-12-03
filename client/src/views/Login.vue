@@ -5,8 +5,10 @@
             <p>
                 Login Tomodachi to meet new friends.
             </p>
+            <p>New user ? <RouterLink to="/register">Register</RouterLink></p>
+
             <hr />
-            <FormKit type="email" name="email" label="Your email" placeholder="Jane" validation="required" />
+            <FormKit type="email" name="email" label="Your email" placeholder="jane@gmail.com" validation="required" />
             <FormKit type="password" name="password" label="Your password" placeholder="Your password"
                 validation="required" />
         </FormKit>

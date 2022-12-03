@@ -1,8 +1,9 @@
 <template>
-    <div class="col-md-6 mt-0 swip" style="overflow-y: visible;" id="swip">
+   
+    <div v-if="(Users.length)" class="col-md-6 mt-0 swip" style="overflow-y: visible;" id="swip">
         <div class="card text-white">
             <img class="card-img" :src="user.picture" height="620" alt="Card image">
-            <div class="card-img-overlay my-100">
+            <div class="card-img-overlay my-100" style="background-color: rgba(0, 0, 0, 0.7);">
                 <h3 class="card-title">{{user.first_name}} {{user.last_name}}</h3>
                 <h5 class="card-title">{{user.age}}, {{user.country}}, {{user.gender}}</h5>
                 <p class="card-text"><span v-for="i in user.interests">{{i.name}}</span></p>
@@ -18,6 +19,16 @@
         </div>
     </div>
 
+    <div v-else class="col-md-6 mt-0 swip">
+        <div class="chargement" style="margin-top: 15px;">
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+        </div>
+    </div>
+
 </template>
 <script>
 import req from '../../store/index.js';
@@ -26,7 +37,7 @@ export default {
     props: ['id'],
     data() {
         return {
-            loading: true,
+            loading: false,
             Users: [],
             user: {},
             current_id: 0,
@@ -37,6 +48,9 @@ export default {
     watch: {
         id(id){
             this.getSwip(this.id)
+        },
+        Users(){
+            this.user = this.Users[this.current_id]
         }
     },
 
@@ -46,8 +60,7 @@ export default {
             req.get(url)
                 .then(response => {
                     this.Users = response.data
-                    console.log(response.data)
-                    this.user = this.Users[current_id]
+                    console.log(response.data)                    
                 }).catch(error => {
                     console.log(error.response)
                     this.$notify({
@@ -81,8 +94,8 @@ export default {
                             this.$notify({
                             text: "It was a match",
                             type: 'einfo',
-                        });
-                    }
+                            });
+                        }
                     this.nextUser()                    
                 })
                 .catch(error => {

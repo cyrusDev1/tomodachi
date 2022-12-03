@@ -382,7 +382,7 @@
       "books": "📚",
       "book": "📖",
       "bookmark": "🔖",
-      "name_badge": "📛",
+      "label_badge": "📛",
       "newspaper": "📰",
       "art": "🎨",
       "clapper": "🎬",
@@ -648,3 +648,9 @@
       "small_blue_diamond": "🔹"
     }
   }
+
+
+
+
+
+ 

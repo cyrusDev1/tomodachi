@@ -6,6 +6,7 @@
             <p>
                 Join Tomodachi to meet new friends.
             </p>
+            <p>Have you account ? <RouterLink to="/login">Login</RouterLink></p>
             <hr />
             <FormKit type="text" name="first_name" label="Your first name" placeholder="Jane" validation="required" />
             <FormKit type="text" name="last_name" label="Your last name" placeholder="Doe" validation="required" />
@@ -35,12 +36,69 @@
                 <br>
             </div>
 
-            <FormKit type="checkbox" label="Interests" name="interests"
-                :options="[{ 'value': '30ca46ff-fdcc-421b-8e71-7ab7b06fab9a', 'label': 'Naruto' }, { 'value': 'b58f0850-bc15-4ba5-a952-3354f1e64c2c', 'label': 'Bleach' }]"
-                decorator-icon="heart" help="Select your interests" validation="min:0" />
+            <FormKit type="checkbox" label="Interests" name="interests" :options="[
+                {
+                    'value': '2c4a1e9e-6655-44ca-9022-8e8f1854fb19',
+                    'label': 'Design'
+                },
+                {
+                    'value': '480cbbae-3a52-4310-8f98-2d1cd6f8be88',
+                    'label': 'World Cup'
+                },
+                {
+                    'value': '546c598a-c991-405e-ad80-59f8a475654a',
+                    'label': 'Football'
+                },
+                {
+                    'value': '582afc07-306c-4dfc-8d7c-0b43ee506bd0',
+                    'label': 'Github'
+                },
+                {
+                    'value': '87dd7266-8e06-4cda-9013-39e3e94361ed',
+                    'label': 'Bleach'
+                },
+                {
+                    'value': '9671f29e-d506-4870-baf1-c170bba9252a',
+                    'label': 'Software'
+                },
+                {
+                    'value': '9b74b40b-af55-4769-b416-a74c49a1d06c',
+                    'label': 'Reading'
+                },
+                {
+                    'value': 'a978deda-f670-41d9-9c5e-f343d536db13',
+                    'label': 'Python'
+                },
+                {
+                    'value': 'd08b87ed-5d3a-4f23-b4b5-fce1095b2e58',
+                    'label': 'Naruto'
+                },
+                {
+                    'value': 'd99d57f3-6425-4acd-8edd-ea01e5cba4df',
+                    'label': 'Programming'
+                },
+                {
+                    'value': 'e1c5d8bd-1b42-481a-871e-86dff97a44e0',
+                    'label': 'Anime'
+                },
+                {
+                    'value': 'f796ce5f-675f-4773-a68f-f5c8e88ac516',
+                    'label': 'TikTok'
+                },
+                {
+                    'value': 'fc0add0a-ba64-4d84-adb6-c50155c689ab',
+                    'label': 'Game'
+                }
+            ]" decorator-icon="heart" help="Select your interests" validation="min:0" />
 
-            <pre>{{ value }}</pre>
         </FormKit>
+        <div v-show="load" class="chargement" style="margin-top: -20px; display:inline">
+                <div class="d-flex justify-content-center align-items-center" style="margin-top: -50px;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+        </div>
     </div>
 
 </template>
@@ -52,7 +110,7 @@ import { useCookies } from "vue3-cookies";
 export default {
     data() {
         return {
-            loading: true,
+            load: false,
             img1: '',
             imageData: null,
             uploadValue: 0,
@@ -92,6 +150,7 @@ export default {
         },
 
         register(value) {
+            this.load = true
             value.picture = null
             const storageRef = firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
             storageRef.on(`state_changed`, snapshot => {
