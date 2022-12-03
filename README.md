@@ -17,6 +17,7 @@ After the development phase, we each wrote a blog post to reflect on the Tomodac
 
 # Peview
 Here is a little preview of our main feature, the swiping through other profiles:
+[See demo here](https://www.veed.io/view/5aac34af-b870-4311-9f62-ebb722b81ed6?sharingWidget=true&panel=share)
 
 ![swiping](https://miro.medium.com/max/720/1*8GBDj1qrAT6wLg7TlpdldQ.webp)
 
@@ -24,6 +25,7 @@ Here is a little preview of our main feature, the swiping through other profiles
 
 ## Overview
 My  web app is a single-page app, coded mainly in Javascript and Python.
+
 ![infra](https://miro.medium.com/max/720/1*Qtcze0PbM4hxMeuXB3eJBQ.webp)
 
 ## Vue.js
@@ -34,6 +36,7 @@ I decided to create the backend routes with flask because that's what we saw at 
 
 ## Storage
 I decided to create the backend routes with flask because that's what we saw at cold, I wanted to deepen.
+
 ![sql](https://miro.medium.com/max/720/1*ux31K4sYNM8dJ40LPJu9lg.webp)
 
 ### Cloud Firestore
