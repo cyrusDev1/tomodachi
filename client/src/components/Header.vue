@@ -35,10 +35,6 @@ export default {
     },
 
 
-    created() {
-
-    },
-
     methods: {
         getUser(user_id) {
             const url = `/user/${user_id}`

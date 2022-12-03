@@ -1,5 +1,4 @@
 <template>
-   
     <div v-if="(Users.length)" class="col-md-6 mt-0 swip" style="overflow-y: visible;" id="swip">
         <div class="card text-white">
             <img class="card-img" :src="user.picture" height="620" alt="Card image">
@@ -18,7 +17,6 @@
             </div>
         </div>
     </div>
-
     <div v-else class="col-md-6 mt-0 swip">
         <div class="chargement" style="margin-top: 15px;">
                 <div class="d-flex justify-content-center align-items-center">

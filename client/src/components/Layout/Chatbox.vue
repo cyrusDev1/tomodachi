@@ -16,14 +16,9 @@
                             <div class="card-body" id="scr"  
                                 style="position: relative; overflow-y: auto; height: 400px;">
 
-
-
-
-
                                 <!--div class="divider d-flex align-items-center mb-4">
                                     <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Today</p>
                                 </div-->
-
 
                                 <div v-for="mesg in Messages"
                                     v-bind:class="mesg.sender_id == user.id ? class_sender[0] : class_receiver[0]">
@@ -50,9 +45,6 @@
                                         <p class="small ms-3 mb-3 rounded-3 text-muted"> {{ mesg.created_at.split('T')[1] }}</p>
                                     </div>
                                 </div>
-
-
-
                             </div>
                             <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                                 <img :src="user.picture" alt="avatar 3" class="rounded-circle"

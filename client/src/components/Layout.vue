@@ -7,7 +7,6 @@
     </div>
 </template>
 <script>
-import req from '../store/index.js';
 import MatchesMessages from "../components/Layout/MatchesMessages.vue"
 import Swipping from "../components/Layout/Swipping.vue"
 import Request from "../components/Layout/Request.vue"
@@ -22,6 +21,7 @@ export default {
         Chatbox,
     },
     props: ['id', 'user'],
+
     data() {
         return {
             loading: true,
@@ -35,9 +35,6 @@ export default {
         console.log(this.path)
     },
 
-    methods: {
-
-    },
 }
 </script>
 <style>

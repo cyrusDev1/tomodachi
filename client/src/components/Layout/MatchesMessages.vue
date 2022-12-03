@@ -5,7 +5,6 @@
             <tab name="Matches">
                 <div class="matches">
                     <div class="row d-flex mt-1">
-                       
                         <div v-for="match in Matches" class="card text-white w-50">
                             <RouterLink :to="{path: this.path + match.id }">
                             <img class="card-img" :src="match.picture" height="155" width="50" alt="Card image">
@@ -14,8 +13,6 @@
                             </div>
                             </RouterLink>
                         </div>
-                        
-                       
                     </div>
                 </div>
             </tab>
